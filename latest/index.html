@@ -61,6 +61,12 @@
 
     <li class="toctree-l2"><a href="#the-expectation-operator">The Expectation Operator</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#iterableexpectation">IterableExpectation</a></li>
+        
+        </ul>
+    
 
     <li class="toctree-l2"><a href="#supported-distributions-algorithms-keywords-and-defaults">Supported Distributions, Algorithms, Keywords, and Defaults</a></li>
     
@@ -115,7 +121,7 @@
 <p>The underlying random variables are assumed to be distributions from <a href="https://github.com/juliastats/distributions.jl"><code>Distributions.jl</code></a>. Currently,  only univariate distributions are supported. </p>
 <p><a id='Installation-1'></a></p>
 <h2 id="installation">Installation</h2>
-<p>To install, run: </p>
+<p>To install, run (in 0.7): </p>
 <pre><code class="julia-repl">julia&gt; using Expectations
 </code></pre>
 
@@ -123,37 +129,40 @@
 <p><a id='The-Expectation-Operator-1'></a></p>
 <h2 id="the-expectation-operator">The Expectation Operator</h2>
 <p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following:</p>
-<p>```@example
-dist = Normal();
-E = expectation(dist)</p>
-<pre><code>
+<pre><code class="julia-repl">julia&gt; dist = Normal();
+ERROR: UndefVarError: Normal not defined
 
-You can also choose and algorithms and default parameters (see below for list):
+julia&gt; E = expectation(dist)
+ERROR: UndefVarError: expectation not defined
+</code></pre>
 
-
-```@example
-E = expectation(dist, Gaussian; n = 30)
+<p>You can also choose and algorithms and default parameters (see below for list):</p>
+<pre><code class="julia-repl">julia&gt; E = expectation(dist, Gaussian; n = 30)
+ERROR: UndefVarError: expectation not defined
 </code></pre>
 
 <p>These objects can then be applied to functions: </p>
-<p>```@example
-E(x -&gt; x)
-E(x -&gt; x^2)</p>
-<pre><code>
+<pre><code class="julia-repl">julia&gt; E(x -&gt; x)
+ERROR: UndefVarError: E not defined
 
-&lt;a id='IterableExpectation-1'&gt;&lt;/a&gt;
+julia&gt; E(x -&gt; x^2)
+ERROR: UndefVarError: E not defined
+</code></pre>
 
-### IterableExpectation
+<p><a id='IterableExpectation-1'></a></p>
+<h3 id="iterableexpectation">IterableExpectation</h3>
+<p>The only concrete subtype of <code>Expectation</code> currently supported is <code>IterableExpectation{NT, WT}</code>. These are expectations for which we have a discrete vector of quadrature nodes and weights, either defined by user fiat, or set algorithmically. These support some additional behavior: </p>
+<pre><code class="julia-repl">julia&gt; nodeList = nodes(E)
+ERROR: UndefVarError: nodes not defined
 
+julia&gt; vals = map(x -&gt; sin(x)^2, nodeList)
+ERROR: UndefVarError: nodeList not defined
 
-The only concrete subtype of `Expectation` currently supported is `IterableExpectation{NT, WT}`. These are expectations for which we have a discrete vector of quadrature nodes and weights, either defined by user fiat, or set algorithmically. These support some additional behavior: 
+julia&gt; E * vals
+ERROR: UndefVarError: E not defined
 
-
-```@example
-nodeList = nodes(E)
-vals = map(x -&gt; sin(x)^2, nodeList)
-E * vals
-(2E) * vals
+julia&gt; (2E) * vals
+ERROR: UndefVarError: E not defined
 </code></pre>
 
 <p>The above behavior, in some sense, puts the "operator" in "expectation operator"; that is, it allows it to move elements of a vector space around,  and to be scalar-multiplied. </p>
@@ -283,5 +292,5 @@ E * vals
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-07-20 20:54:33
+Build Date UTC : 2018-07-20 21:05:40
 -->
