@@ -65,6 +65,8 @@
         
             <li><a class="toctree-l3" href="#iterableexpectation">IterableExpectation</a></li>
         
+            <li><a class="toctree-l3" href="#user-defined-nodes-and-convenience-functions">User-Defined Nodes and Convenience Functions</a></li>
+        
         </ul>
     
 
@@ -134,56 +136,23 @@ julia&gt; Pkg.add(&quot;Expectations&quot;)
  [no changes]
 
 julia&gt; using Expectations
+
+julia&gt; Pkg.add(&quot;Suppressor&quot;) # hide
+ Resolving package versions...
+ Installed Suppressor ─ v0.1.1
+  Updating `~/.julia/environments/v0.7/Project.toml`
+  [fd094767] + Suppressor v0.1.1
+  Updating `~/.julia/environments/v0.7/Manifest.toml`
+  [fd094767] + Suppressor v0.1.1
 </code></pre>
 
 <p>Currently, Julia v0.6 and Julia v0.7 are supported. </p>
 <p><a id='The-Expectation-Operator-1'></a></p>
 <h2 id="the-expectation-operator">The Expectation Operator</h2>
-<p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following:</p>
+<p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following (using <code>Suppressor.@suppress</code> to suppress deprecations in a dependency):</p>
 <pre><code class="julia-repl">julia&gt; dist = Normal();
 
-julia&gt; E = expectation(dist)
-WARNING: importing deprecated binding Base.SymTridiagonal into FastGaussQuadrature.
-WARNING: Base.SymTridiagonal is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: importing deprecated binding Base.eig into FastGaussQuadrature.
-WARNING: Base.eig is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.SymTridiagonal is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.eig is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.SymTridiagonal is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.eig is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: importing deprecated binding Base.norm into FastGaussQuadrature.
-WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-in hermpts_rec at /home/travis/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl
-WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
-Add `using LinearAlgebra` to your imports.
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
-in hermpts_asy at /home/travis/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl
+julia&gt; @suppress E = expectation(dist)
 ┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
 │   caller = HermiteInitialGuesses(::Int64) at gausshermite.jl:217
 └ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:217
@@ -200,7 +169,7 @@ IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.8
 </code></pre>
 
 <p>You can also choose and algorithms and default parameters (see below for list):</p>
-<pre><code class="julia-repl">julia&gt; E = expectation(dist, Gaussian; n = 30)
+<pre><code class="julia-repl">julia&gt; @suppress E = expectation(dist, Gaussian; n = 30)
 ┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
 │   caller = HermiteInitialGuesses(::Int64) at gausshermite.jl:217
 └ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:217
@@ -217,75 +186,38 @@ IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.8
 </code></pre>
 
 <p>These objects can then be applied to functions: </p>
-<pre><code class="julia-repl">julia&gt; E(x -&gt; x)
-2.889272167366858e-17
+<pre><code class="julia-repl">julia&gt; @suppress E(x -&gt; x)
+ERROR: UndefVarError: E not defined
 
-julia&gt; E(x -&gt; x^2)
-0.9999999999999998
+julia&gt; @suppress E(x -&gt; x^2)
+ERROR: UndefVarError: E not defined
 </code></pre>
 
 <p>There is also a convenience function to evaluate expectations directly, without returning the operator: </p>
-<pre><code class="julia-repl">julia&gt; expectation(f, dist)
-ERROR: UndefVarError: f not defined
+<pre><code class="julia-repl">
 </code></pre>
 
 <p><a id='IterableExpectation-1'></a></p>
 <h3 id="iterableexpectation">IterableExpectation</h3>
 <p>The only concrete subtype of <code>Expectation</code> currently supported is <code>IterableExpectation{NT, WT}</code>. These are expectations for which we have a discrete vector of quadrature nodes and weights, either defined by user fiat, or set algorithmically. These support some additional behavior: </p>
 <pre><code class="julia-repl">julia&gt; nodeList = nodes(E)
-30-element Array{Float64,1}:
- -9.706235997359522
- -8.680837722732212
- -7.825051744352812
- -7.055396866960293
- -6.339997686869597
- -5.662381850082874
- -5.012600596486518
- -4.384020365898052
- -3.7718944231592366
- -3.1726346394204032
-  ⋮
-  3.7718944231592366
-  4.384020365898052
-  5.012600596486518
-  5.662381850082874
-  6.339997686869597
-  7.055396866960293
-  7.825051744352812
-  8.680837722732212
-  9.706235997359522
+ERROR: UndefVarError: E not defined
 
 julia&gt; vals = map(x -&gt; sin(x)^2, nodeList)
-30-element Array{Float64,1}:
- 0.07714873346193572
- 0.45858956245020704
- 0.9991632949491157
- 0.48681492497846135
- 0.003224175412847101
- 0.33836196398991786
- 0.9125482830595972
- 0.8959942414260766
- 0.34737888553504265
- 0.0009632954126136019
- ⋮
- 0.34737888553504265
- 0.8959942414260766
- 0.9125482830595972
- 0.33836196398991786
- 0.003224175412847101
- 0.48681492497846135
- 0.9991632949491157
- 0.45858956245020704
- 0.07714873346193572
+ERROR: UndefVarError: nodeList not defined
 
-julia&gt; E * vals
-0.4323323583816935
+julia&gt; @suppress E * vals
+ERROR: UndefVarError: E not defined
 
-julia&gt; (2E) * vals
-0.864664716763387
+julia&gt; @suppress (2E) * vals
+ERROR: UndefVarError: E not defined
 </code></pre>
 
-<p>The above behavior, in some sense, puts the "operator" in "expectation operator"; that is, it allows it to move elements of a vector space around,  and to be scalar-multiplied. </p>
+<p>The above behavior, in some sense, puts the "operator" in "expectation operator"; that is, it allows it to move elements of a vector space around, and to be scalar-multiplied. </p>
+<p><a id='User-Defined-Nodes-and-Convenience-Functions-1'></a></p>
+<h3 id="user-defined-nodes-and-convenience-functions">User-Defined Nodes and Convenience Functions</h3>
+<p>There are some situations where we are forced to use a specific set of nodes. In those situations, <code>E = expectation(dist, nodes)</code> will create the relevant object. </p>
+<p>In general, <code>expectation(f, dist, ...)</code> is equivalent to <code>E(f)</code>, where <code>E = expectation(dist, ...)</code>. </p>
 <p><a id='Supported-Distributions,-Algorithms,-Keywords,-and-Defaults-1'></a></p>
 <h2 id="supported-distributions-algorithms-keywords-and-defaults">Supported Distributions, Algorithms, Keywords, and Defaults</h2>
 <p>Here is a list of currently supported distributions, along with keyword arguments and their defaults.  </p>
@@ -352,7 +284,9 @@ julia&gt; (2E) * vals
 <p><a id='Mathematical-Details-and-References-1'></a></p>
 <h2 id="mathematical-details-and-references">Mathematical Details and References</h2>
 <p>The specific quadrature algorithms come from the <a href="https://github.com/ajt60gaibb/FastGaussQuadrature.jl"><code>FastGaussQuadrature.jl</code></a> library, which is maintained by <a href="https://github.com/ajt60gaibb">Alex Townsend</a> of Cornell University. Much of the quadrature code came from the <a href="https://github.com/pkofod/DistQuads.jl"><code>DistQuads.jl</code></a> library, which is maintained by <a href="https://github.com/pkofod">Patrick K. Mogensen</a> at the University of Copenhagen. </p>
-<p>:warning: It is important to be aware of the deficiencies of numerical quadrature schemes. For example, it is recommended to be careful when using these methods for the following classes of functions and situations: </p>
+<blockquote>
+<p><strong>WARNING</strong>: It is important to be aware of the deficiencies of numerical quadrature schemes. For example, it is recommended to be careful when using these methods for the following classes of functions and situations:</p>
+</blockquote>
 <ul>
 <li>Discontinuous or nondifferentiable functions (even if the function is a.e.-differentiable)</li>
 <li>Periodic/oscillatory functions with a high frequency</li>
@@ -412,5 +346,5 @@ julia&gt; (2E) * vals
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-07-20 21:38:15
+Build Date UTC : 2018-07-20 21:54:47
 -->
