@@ -121,11 +121,10 @@
 <p>The underlying random variables are assumed to be distributions from <a href="https://github.com/juliastats/distributions.jl"><code>Distributions.jl</code></a>. Currently,  only univariate distributions are supported. </p>
 <p><a id='Installation-1'></a></p>
 <h2 id="installation">Installation</h2>
-<p>To install, run: </p>
-<pre><code class="julia-repl">julia&gt; Pkg.add(&quot;Expectations&quot;)
-WARNING: importing deprecated binding Base.Pkg into ex-default.
-WARNING: Base.Pkg is deprecated, run `using Pkg` instead
-  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+<p>To install, run (in v0.7): </p>
+<pre><code class="julia-repl">julia&gt; using Pkg
+
+julia&gt; Pkg.add(&quot;Expectations&quot;)
   Updating registry at `~/.julia/registries/General`
   Updating git-repo `https://github.com/JuliaRegistries/General.git`
 [?25l[2K[?25h Resolving package versions...
@@ -133,46 +132,157 @@ WARNING: Base.Pkg is deprecated, run `using Pkg` instead
  [no changes]
   Updating `~/.julia/environments/v0.7/Manifest.toml`
  [no changes]
+
+julia&gt; using Expectations
 </code></pre>
 
-<p>Currently, Julia 0.6 and Julia 0.7 are supported. </p>
+<p>Currently, Julia v0.6 and Julia v0.7 are supported. </p>
 <p><a id='The-Expectation-Operator-1'></a></p>
 <h2 id="the-expectation-operator">The Expectation Operator</h2>
 <p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following:</p>
 <pre><code class="julia-repl">julia&gt; dist = Normal();
-ERROR: UndefVarError: Normal not defined
 
 julia&gt; E = expectation(dist)
-ERROR: UndefVarError: expectation not defined
+WARNING: importing deprecated binding Base.SymTridiagonal into FastGaussQuadrature.
+WARNING: Base.SymTridiagonal is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: importing deprecated binding Base.eig into FastGaussQuadrature.
+WARNING: Base.eig is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.SymTridiagonal is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.eig is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.SymTridiagonal is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.eig is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: importing deprecated binding Base.norm into FastGaussQuadrature.
+WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+in hermpts_rec at /home/travis/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl
+WARNING: Base.norm is deprecated: it has been moved to the standard library package `LinearAlgebra`.
+Add `using LinearAlgebra` to your imports.
+  likely near /home/travis/build/econtoolkit/Expectations.jl/docs/make.jl:4
+in hermpts_asy at /home/travis/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl
+┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
+│   caller = HermiteInitialGuesses(::Int64) at gausshermite.jl:217
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:217
+┌ Warning: using `A[I...] = x` to implicitly broadcast `x` across many locations is deprecated. Use `A[I...] .= x` instead.
+│   caller = hermpts_rec(::Int64) at gausshermite.jl:69
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:69
+┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
+│   caller = gausshermite(::Int64) at gausshermite.jl:0
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:0
+┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
+│   caller = gausshermite(::Int64) at gausshermite.jl:32
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:32
+IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
 </code></pre>
 
 <p>You can also choose and algorithms and default parameters (see below for list):</p>
 <pre><code class="julia-repl">julia&gt; E = expectation(dist, Gaussian; n = 30)
-ERROR: UndefVarError: expectation not defined
+┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
+│   caller = HermiteInitialGuesses(::Int64) at gausshermite.jl:217
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:217
+┌ Warning: using `A[I...] = x` to implicitly broadcast `x` across many locations is deprecated. Use `A[I...] .= x` instead.
+│   caller = hermpts_rec(::Int64) at gausshermite.jl:69
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:69
+┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
+│   caller = gausshermite(::Int64) at gausshermite.jl:0
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:0
+┌ Warning: `flipdim(A, d)` is deprecated, use `reverse(A, dims=d)` instead.
+│   caller = gausshermite(::Int64) at gausshermite.jl:32
+└ @ FastGaussQuadrature ~/.julia/packages/FastGaussQuadrature/lfFe/src/gausshermite.jl:32
+IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
 </code></pre>
 
 <p>These objects can then be applied to functions: </p>
 <pre><code class="julia-repl">julia&gt; E(x -&gt; x)
-ERROR: UndefVarError: E not defined
+2.889272167366858e-17
 
 julia&gt; E(x -&gt; x^2)
-ERROR: UndefVarError: E not defined
+0.9999999999999998
+</code></pre>
+
+<p>There is also a convenience function to evaluate expectations directly, without returning the operator: </p>
+<pre><code class="julia-repl">julia&gt; expectation(f, dist)
+ERROR: UndefVarError: f not defined
 </code></pre>
 
 <p><a id='IterableExpectation-1'></a></p>
 <h3 id="iterableexpectation">IterableExpectation</h3>
 <p>The only concrete subtype of <code>Expectation</code> currently supported is <code>IterableExpectation{NT, WT}</code>. These are expectations for which we have a discrete vector of quadrature nodes and weights, either defined by user fiat, or set algorithmically. These support some additional behavior: </p>
 <pre><code class="julia-repl">julia&gt; nodeList = nodes(E)
-ERROR: UndefVarError: nodes not defined
+30-element Array{Float64,1}:
+ -9.706235997359522
+ -8.680837722732212
+ -7.825051744352812
+ -7.055396866960293
+ -6.339997686869597
+ -5.662381850082874
+ -5.012600596486518
+ -4.384020365898052
+ -3.7718944231592366
+ -3.1726346394204032
+  ⋮
+  3.7718944231592366
+  4.384020365898052
+  5.012600596486518
+  5.662381850082874
+  6.339997686869597
+  7.055396866960293
+  7.825051744352812
+  8.680837722732212
+  9.706235997359522
 
 julia&gt; vals = map(x -&gt; sin(x)^2, nodeList)
-ERROR: UndefVarError: nodeList not defined
+30-element Array{Float64,1}:
+ 0.07714873346193572
+ 0.45858956245020704
+ 0.9991632949491157
+ 0.48681492497846135
+ 0.003224175412847101
+ 0.33836196398991786
+ 0.9125482830595972
+ 0.8959942414260766
+ 0.34737888553504265
+ 0.0009632954126136019
+ ⋮
+ 0.34737888553504265
+ 0.8959942414260766
+ 0.9125482830595972
+ 0.33836196398991786
+ 0.003224175412847101
+ 0.48681492497846135
+ 0.9991632949491157
+ 0.45858956245020704
+ 0.07714873346193572
 
 julia&gt; E * vals
-ERROR: UndefVarError: E not defined
+0.4323323583816935
 
 julia&gt; (2E) * vals
-ERROR: UndefVarError: E not defined
+0.864664716763387
 </code></pre>
 
 <p>The above behavior, in some sense, puts the "operator" in "expectation operator"; that is, it allows it to move elements of a vector space around,  and to be scalar-multiplied. </p>
@@ -302,5 +412,5 @@ ERROR: UndefVarError: E not defined
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-07-20 21:18:47
+Build Date UTC : 2018-07-20 21:38:15
 -->
