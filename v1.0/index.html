@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A package to help with numerical expectations of random variables and their functions.">
+  <meta name="author" content="econtoolkit, jlperla, ArnavSood">
+  <link rel="shortcut icon" href="./img/favicon.ico">
+  <title>Home - Expectations.jl</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  <link href="./assets/Documenter.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Expectations.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#overview">Overview</a></li>
+    
+
+    <li class="toctree-l2"><a href="#installation">Installation</a></li>
+    
+
+    <li class="toctree-l2"><a href="#the-expectation-operator">The Expectation Operator</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#iterableexpectation">IterableExpectation</a></li>
+        
+            <li><a class="toctree-l3" href="#user-defined-nodes">User-Defined Nodes</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#supported-distributions-algorithms-keywords-and-defaults">Supported Distributions, Algorithms, Keywords, and Defaults</a></li>
+    
+
+    <li class="toctree-l2"><a href="#mathematical-details-and-references">Mathematical Details and References</a></li>
+    
+
+    <li class="toctree-l2"><a href="#contact">Contact</a></li>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Expectations.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        <a href="https://github.com/econtoolkit/Expectations.jl/edit/master/docs/index.md"
+          class="icon icon-github"> Edit on GitHub</a>
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Overview-1'></a></p>
+<h2 id="overview">Overview</h2>
+<p>The goal of this package is to provide an intuitive and mathematically sound interface for taking expectations of random variables and their higher-order functions (i.e., if $X \sim N(0, 1)$, what is $\mathbb{E}[\sin(X)]$?). </p>
+<p>The underlying random variables are assumed to be distributions from <a href="https://github.com/juliastats/distributions.jl"><code>Distributions.jl</code></a>. Currently,  only univariate distributions are supported. </p>
+<p><a id='Installation-1'></a></p>
+<h2 id="installation">Installation</h2>
+<p>To install, run (in v0.7): </p>
+<pre><code class="julia-repl">julia&gt; using Pkg
+
+julia&gt; Pkg.add(&quot;Expectations&quot;)
+  Updating registry at `~/.julia/registries/General`
+  Updating git-repo `https://github.com/JuliaRegistries/General.git`
+[?25l[2K[?25h Resolving package versions...
+  Updating `~/.julia/environments/v0.7/Project.toml`
+ [no changes]
+  Updating `~/.julia/environments/v0.7/Manifest.toml`
+ [no changes]
+
+julia&gt; using Expectations
+</code></pre>
+
+<p>Currently, Julia v0.6 and Julia v0.7 are supported. </p>
+<p><a id='The-Expectation-Operator-1'></a></p>
+<h2 id="the-expectation-operator">The Expectation Operator</h2>
+<p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following:</p>
+<pre><code class="julia-repl">julia&gt; dist = Normal();
+
+julia&gt; E = expectation(dist)
+IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
+</code></pre>
+
+<p>You can also choose and algorithms and default parameters (see below for list):</p>
+<pre><code class="julia-repl">julia&gt; E = expectation(dist, Gaussian; n = 30) # Could have done expectation(dist) or expectation(dist; n = 30)
+IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
+</code></pre>
+
+<p>These objects can then be applied to functions: </p>
+<pre><code class="julia-repl">julia&gt; E(x -&gt; x)
+2.889272167366858e-17
+
+julia&gt; E(x -&gt; x^2)
+0.9999999999999998
+</code></pre>
+
+<p>There is also a convenience function to evaluate expectations directly, without returning the operator: </p>
+<pre><code class="julia-repl">julia&gt; f = x -&gt; x^2
+#5 (generic function with 1 method)
+
+julia&gt; expectation(f, dist)
+0.9999999999999998
+</code></pre>
+
+<p>In general, <code>expectation(f, dist, ...)</code> is equivalent to <code>E(f)</code>, where <code>E = expectation(dist, ...)</code>. </p>
+<p><a id='IterableExpectation-1'></a></p>
+<h3 id="iterableexpectation">IterableExpectation</h3>
+<p>The only concrete subtype of <code>Expectation</code> currently supported is <code>IterableExpectation{NT, WT}</code>. These are expectations for which we have a discrete vector of quadrature nodes and weights, either defined by user fiat, or set algorithmically. These support some additional behavior: </p>
+<pre><code class="julia-repl">julia&gt; nodeList = nodes(E);
+
+julia&gt; vals = map(x -&gt; x^2, nodeList);
+
+julia&gt; E * vals
+0.9999999999999998
+
+julia&gt; (2E) * vals
+1.9999999999999996
+</code></pre>
+
+<p>The above behavior, in some sense, puts the "operator" in "expectation operator"; that is, it allows it to move elements of a vector space around, and to be scalar-multiplied. </p>
+<p><a id='User-Defined-Nodes-1'></a></p>
+<h3 id="user-defined-nodes">User-Defined Nodes</h3>
+<p>There are some situations where we are forced to use a specific set of nodes. In those situations, <code>E = expectation(dist, nodes)</code> will create the relevant object. </p>
+<p><a id='Supported-Distributions,-Algorithms,-Keywords,-and-Defaults-1'></a></p>
+<h2 id="supported-distributions-algorithms-keywords-and-defaults">Supported Distributions, Algorithms, Keywords, and Defaults</h2>
+<p>Here is a list of currently supported distributions, along with keyword arguments and their defaults.  </p>
+<table>
+<thead>
+<tr>
+<th align="right">Distribution Name</th>
+<th align="right">Algorithm (Julia Type)</th>
+<th align="right">Keywords and Defaults</th>
+<th align="right">Restrictions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">Discrete Univariate</td>
+<td align="right">FiniteDiscrete &lt;: QuadratureAlgorithm</td>
+<td align="right">N/A</td>
+<td align="right">Support must be finite.</td>
+</tr>
+<tr>
+<td align="right">Continuous Univariate</td>
+<td align="right">Gauss-Legendre (Gaussian &lt;: QuadratureAlgorithm)</td>
+<td align="right">n = 500</td>
+<td align="right">Support must be a compact interval $[a, b]$.</td>
+</tr>
+<tr>
+<td align="right">Continuous Univariate</td>
+<td align="right">QNWDist<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> (QuantileLinSpace &lt;: ...)</td>
+<td align="right">n = 50, q0 = 0.001, qN = 0.999</td>
+<td align="right">Distribution must be nondegenerate.</td>
+</tr>
+<tr>
+<td align="right">Normal &lt;: Continuous Univariate</td>
+<td align="right">Gauss-Hermite (...)</td>
+<td align="right">n = 30</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td align="right">LogNormal &lt;: ...</td>
+<td align="right">Gauss-Hermite (...)</td>
+<td align="right">n = 30</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td align="right">Beta &lt;: ...</td>
+<td align="right">Gauss-Jacobi (...)</td>
+<td align="right">n = 32</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td align="right">Exponential &lt;: ...</td>
+<td align="right">Gauss-Laguerre (...)</td>
+<td align="right">n = 32</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td align="right">Gamma &lt;: ...</td>
+<td align="right">Gauss-Laguerre (...)</td>
+<td align="right">n = 32</td>
+<td align="right">...</td>
+</tr>
+<tr>
+<td align="right">Univariate</td>
+<td align="right">Trapezoidal &lt;: ExplicitQuadratureAlgorithm</td>
+<td align="right">N/A</td>
+<td align="right">All nodes must be inside distribution's support.</td>
+</tr>
+</tbody>
+</table>
+<p><a id='Mathematical-Details-and-References-1'></a></p>
+<h2 id="mathematical-details-and-references">Mathematical Details and References</h2>
+<p>The specific quadrature algorithms come from the <a href="https://github.com/ajt60gaibb/FastGaussQuadrature.jl"><code>FastGaussQuadrature.jl</code></a> library, which is maintained by <a href="https://github.com/ajt60gaibb">Alex Townsend</a> of Cornell University. Much of the quadrature code came from the <a href="https://github.com/pkofod/DistQuads.jl"><code>DistQuads.jl</code></a> library, which is maintained by <a href="https://github.com/pkofod">Patrick K. Mogensen</a> at the University of Copenhagen. In addition, there are some objects contributed by individual users; see docstring for citations. </p>
+<blockquote>
+<p><strong>WARNING</strong>: It is important to be aware of the deficiencies of numerical quadrature schemes. For example, it is recommended to be careful when using these methods for the following classes of functions and situations:</p>
+</blockquote>
+<ul>
+<li>Discontinuous or nondifferentiable functions (even if the function is a.e.-differentiable)</li>
+<li>Periodic/oscillatory functions with a high frequency</li>
+<li>Extremely large numbers of quadrature nodes, which may lead to vanishingly small weights.</li>
+</ul>
+<p><a id='Contact-1'></a></p>
+<h2 id="contact">Contact</h2>
+<p>If you would like to get in touch, please do one of the following:</p>
+<ul>
+<li>Issue requests: Open an issue on the <a href="https://github.com/econtoolkit/Expectations.jl">package repository</a> with the tag <code>feature request</code>.</li>
+<li>Bugs: Same as above, but with the tag <code>bug</code>.</li>
+<li>Pull Request: We are always open to new functionality. If you have a feature you'd like to add (say, a new distribution or algorithm), once you prepare a PR with the feature and some tests, open it in the usual way.</li>
+<li>Other: You can reach out to Jesse Perla at <a href="mailto:jesse.perla@ubc.ca"><code>jesse.perla@ubc.ca</code></a> and Arnav Sood at <a href="mailto:arnav.sood@ubc.ca"><code>arnav.sood@ubc.ca</code></a></li>
+<li>Citation: If this package was helpful in your research work, you may consider citing the package in whatever method is appropriate for your field.</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>This is a quadrature scheme written by <a href="http://spencerlyon.com/">Spencer Lyon</a> (PhD. NYU) as part of the <a href="https://quantecon.org/"><code>QuantEcon</code></a> project. Used with permission.&#160;<a class="footnote-backref" href="#fnref:1" rev="footnote" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/econtoolkit/Expectations.jl/" class="fa fa-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="./js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="./assets/mathjaxhelper.js"></script>
+      <script src="./search/require.js"></script>
+      <script src="./search/search.js"></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.17.5
+Build Date UTC : 2018-07-25 19:50:02
+-->
