@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A package to help with numerical expectations of random variables and their functions.">
-  <meta name="author" content="econtoolkit, jlperla, ArnavSood">
+  <meta name="author" content="econtoolkit, jlperla, arnavs">
   <link rel="shortcut icon" href="./img/favicon.ico">
   <title>Home - Expectations.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
@@ -127,38 +127,41 @@
 <pre><code class="julia-repl">julia&gt; using Pkg
 
 julia&gt; Pkg.add(&quot;Expectations&quot;)
-  Updating registry at `~/.julia/registries/General`
-  Updating git-repo `https://github.com/JuliaRegistries/General.git`
-[?25l[2K[?25h Resolving package versions...
-  Updating `~/.julia/environments/v0.7/Project.toml`
+ Resolving package versions...
+  Updating `~/.julia/environments/v1.0/Project.toml`
  [no changes]
-  Updating `~/.julia/environments/v0.7/Manifest.toml`
+  Updating `~/.julia/environments/v1.0/Manifest.toml`
  [no changes]
 
 julia&gt; using Expectations
+
+julia&gt; using Distributions
+ERROR: ArgumentError: Package Distributions not found in current path:
+- Run `Pkg.add(&quot;Distributions&quot;)` to install the Distributions package.
 </code></pre>
 
-<p>Currently, Julia v0.6 and Julia v0.7 are supported. </p>
+<p>Currently, Julia v0.6 and up are supported. </p>
 <p><a id='The-Expectation-Operator-1'></a></p>
 <h2 id="the-expectation-operator">The Expectation Operator</h2>
 <p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following:</p>
 <pre><code class="julia-repl">julia&gt; dist = Normal();
+ERROR: UndefVarError: Normal not defined
 
 julia&gt; E = expectation(dist)
-IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
+ERROR: UndefVarError: dist not defined
 </code></pre>
 
 <p>You can also choose and algorithms and default parameters (see below for list):</p>
 <pre><code class="julia-repl">julia&gt; E = expectation(dist, Gaussian; n = 30) # Could have done expectation(dist) or expectation(dist; n = 30)
-IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
+ERROR: UndefVarError: dist not defined
 </code></pre>
 
 <p>These objects can then be applied to functions: </p>
 <pre><code class="julia-repl">julia&gt; E(x -&gt; x)
-2.889272167366858e-17
+ERROR: UndefVarError: E not defined
 
 julia&gt; E(x -&gt; x^2)
-0.9999999999999998
+ERROR: UndefVarError: E not defined
 </code></pre>
 
 <p>There is also a convenience function to evaluate expectations directly, without returning the operator: </p>
@@ -166,7 +169,7 @@ julia&gt; E(x -&gt; x^2)
 #5 (generic function with 1 method)
 
 julia&gt; expectation(f, dist)
-0.9999999999999998
+ERROR: UndefVarError: dist not defined
 </code></pre>
 
 <p>In general, <code>expectation(f, dist, ...)</code> is equivalent to <code>E(f)</code>, where <code>E = expectation(dist, ...)</code>. </p>
@@ -174,14 +177,16 @@ julia&gt; expectation(f, dist)
 <h3 id="iterableexpectation">IterableExpectation</h3>
 <p>The only concrete subtype of <code>Expectation</code> currently supported is <code>IterableExpectation{NT, WT}</code>. These are expectations for which we have a discrete vector of quadrature nodes and weights, either defined by user fiat, or set algorithmically. These support some additional behavior: </p>
 <pre><code class="julia-repl">julia&gt; nodeList = nodes(E);
+ERROR: UndefVarError: E not defined
 
 julia&gt; vals = map(x -&gt; x^2, nodeList);
+ERROR: UndefVarError: nodeList not defined
 
 julia&gt; E * vals
-0.9999999999999998
+ERROR: UndefVarError: E not defined
 
 julia&gt; (2E) * vals
-1.9999999999999996
+ERROR: UndefVarError: E not defined
 </code></pre>
 
 <p>The above behavior, in some sense, puts the "operator" in "expectation operator"; that is, it allows it to move elements of a vector space around, and to be scalar-multiplied. </p>
@@ -215,7 +220,7 @@ julia&gt; (2E) * vals
 </tr>
 <tr>
 <td align="right">Continuous Univariate</td>
-<td align="right">QNWDist<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> (QuantileLinSpace &lt;: ...)</td>
+<td align="right">QNWDist<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> (QuantileRange &lt;: ...)</td>
 <td align="right">n = 50, q0 = 0.001, qN = 0.999</td>
 <td align="right">Distribution must be nondegenerate.</td>
 </tr>
@@ -330,5 +335,5 @@ julia&gt; (2E) * vals
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-07-24 21:05:09
+Build Date UTC : 2018-08-10 18:54:49
 -->
