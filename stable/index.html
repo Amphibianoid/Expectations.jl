@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A package to help with numerical expectations of random variables and their functions.">
-  <meta name="author" content="econtoolkit, jlperla, ArnavSood">
+  <meta name="author" content="econtoolkit, jlperla, arnavs">
   <link rel="shortcut icon" href="./img/favicon.ico">
   <title>Home - Expectations.jl</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
@@ -127,22 +127,30 @@
 <pre><code class="julia-repl">julia&gt; using Pkg
 
 julia&gt; Pkg.add(&quot;Expectations&quot;)
-  Updating registry at `~/.julia/registries/General`
-  Updating git-repo `https://github.com/JuliaRegistries/General.git`
-[?25l[2K[?25h Resolving package versions...
-  Updating `~/.julia/environments/v0.7/Project.toml`
+ Resolving package versions...
+  Updating `~/.julia/environments/v1.0/Project.toml`
  [no changes]
-  Updating `~/.julia/environments/v0.7/Manifest.toml`
+  Updating `~/.julia/environments/v1.0/Manifest.toml`
  [no changes]
 
 julia&gt; using Expectations
+
+julia&gt; Pkg.add(&quot;Distributions&quot;)
+ Resolving package versions...
+  Updating `~/.julia/environments/v1.0/Project.toml`
+  [31c24e10] + Distributions v0.16.2
+  Updating `~/.julia/environments/v1.0/Manifest.toml`
+ [no changes]
+
+julia&gt; using Distributions
 </code></pre>
 
-<p>Currently, Julia v0.6 and Julia v0.7 are supported. </p>
+<p>Currently, Julia v0.6 and up are supported. </p>
 <p><a id='The-Expectation-Operator-1'></a></p>
 <h2 id="the-expectation-operator">The Expectation Operator</h2>
 <p>The key object in this package is an <strong>expectation operator</strong>, or an object <code>&lt;: Expectation</code>. These include all objects capable of being called on a function; e.g. that support a method <code>function (e::Expectation)(f::Function)</code>. You can create these as following:</p>
-<pre><code class="julia-repl">julia&gt; dist = Normal();
+<pre><code class="julia-repl">
+julia&gt; dist = Normal();
 
 julia&gt; E = expectation(dist)
 IterableExpectation{Array{Float64,1},Array{Float64,1}}([-9.70624, -8.68084, -7.82505, -7.0554, -6.34, -5.66238, -5.0126, -4.38402, -3.77189, -3.17263  …  3.17263, 3.77189, 4.38402, 5.0126, 5.66238, 6.34, 7.0554, 7.82505, 8.68084, 9.70624], [1.64081e-21, 1.58556e-17, 1.62408e-14, 4.57343e-12, 5.17846e-10, 2.88218e-8, 8.90909e-7, 1.658e-5, 0.000196513, 0.00154471  …  0.00154471, 0.000196513, 1.658e-5, 8.90909e-7, 2.88218e-8, 5.17846e-10, 4.57343e-12, 1.62408e-14, 1.58556e-17, 1.64081e-21])
@@ -215,7 +223,7 @@ julia&gt; (2E) * vals
 </tr>
 <tr>
 <td align="right">Continuous Univariate</td>
-<td align="right">QNWDist<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> (QuantileLinSpace &lt;: ...)</td>
+<td align="right">QNWDist<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" rel="footnote">1</a></sup> (QuantileRange &lt;: ...)</td>
 <td align="right">n = 50, q0 = 0.001, qN = 0.999</td>
 <td align="right">Distribution must be nondegenerate.</td>
 </tr>
@@ -330,5 +338,5 @@ julia&gt; (2E) * vals
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-07-25 21:01:54
+Build Date UTC : 2018-08-20 21:47:26
 -->
