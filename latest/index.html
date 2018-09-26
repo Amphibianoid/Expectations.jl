@@ -127,19 +127,15 @@
 <pre><code class="julia-repl">julia&gt; using Pkg
 
 julia&gt; Pkg.add(&quot;Expectations&quot;)
- Resolving package versions...
-  Updating `~/.julia/environments/v1.0/Project.toml`
- [no changes]
-  Updating `~/.julia/environments/v1.0/Manifest.toml`
- [no changes]
+ERROR: Cannot add package with the same name or uuid as the project
 
 julia&gt; using Expectations
 
 julia&gt; Pkg.add(&quot;Distributions&quot;)
  Resolving package versions...
-  Updating `~/.julia/environments/v1.0/Project.toml`
-  [31c24e10] + Distributions v0.16.4
-  Updating `~/.julia/environments/v1.0/Manifest.toml`
+  Updating `../../Project.toml`
+ [no changes]
+  Updating `../../Manifest.toml`
  [no changes]
 
 julia&gt; using Distributions
@@ -338,5 +334,5 @@ julia&gt; (2E) * vals
 
 <!--
 MkDocs version : 0.17.5
-Build Date UTC : 2018-09-26 19:06:05
+Build Date UTC : 2018-09-26 20:36:26
 -->
